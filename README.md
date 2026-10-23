@@ -1,6 +1,6 @@
-# __NAME__
+# terraform-aws-vpc
 
-__DESCRIPTION__
+VPC with public and private subnets across AZs, NAT gateway strategy, DNS and least-privilege flow logs
 
 ## Opinions
 
@@ -10,7 +10,7 @@ __DESCRIPTION__
 
 ```hcl
 module "this" {
-  source = "git::https://github.com/Olensys/__NAME__.git?ref=v1.0.0"
+  source = "git::https://github.com/Olensys/terraform-aws-vpc.git?ref=v1.0.0"
 
   name = "example"
   context = {
