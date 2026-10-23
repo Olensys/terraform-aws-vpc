@@ -5,4 +5,9 @@ run "apply_minimal" {
   module {
     source = "./examples/minimal"
   }
+
+  assert {
+    condition     = length(output.private_subnet_ids) == 2 && length(output.public_subnet_ids) == 2
+    error_message = "Minimal example must create two public and two private subnets."
+  }
 }

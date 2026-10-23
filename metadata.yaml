@@ -4,7 +4,7 @@ tier: capability          # primitive | capability | blueprint
 maturity: experimental    # experimental | stable | deprecated
 description: VPC with public and private subnets across AZs, NAT gateway strategy, DNS and least-privilege flow logs
 owners: [platform]
-upstream: null            # e.g. "terraform-aws-modules/s3-bucket/aws 5.17.0"
-pairs_with: null          # e.g. "terraform-google-gcs-bucket"
+upstream: "terraform-aws-modules/vpc/aws 6.7.3"
+pairs_with: terraform-google-network
 registry_name: terraform-aws-vpc
 deprecated: null          # { removal: YYYY-MM-DD, replacement: <repo> }
