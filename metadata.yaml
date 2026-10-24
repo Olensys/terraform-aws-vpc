@@ -1,7 +1,7 @@
 name: terraform-aws-vpc
 cloud: aws          # aws | google | common
 tier: capability          # primitive | capability | blueprint
-maturity: experimental    # experimental | stable | deprecated
+maturity: stable    # experimental | stable | deprecated
 description: VPC with public and private subnets across AZs, NAT gateway strategy, DNS and least-privilege flow logs
 owners: [platform]
 upstream: "terraform-aws-modules/vpc/aws 6.7.3"
