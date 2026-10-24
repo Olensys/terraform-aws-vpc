@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.3](https://github.com/Olensys/terraform-aws-vpc/compare/v1.0.2...v1.0.3) (2026-10-24)
+
+
+### Bug Fixes
+
+* **examples:** pin naming module to v1.0.1 ([e757230](https://github.com/Olensys/terraform-aws-vpc/commit/e75723087c35c9e64ca1fab91f1ccab189c9ec85))
+* run integration on change and weekly instead of nightly ([b6920c6](https://github.com/Olensys/terraform-aws-vpc/commit/b6920c68f5bfe7543bb9ceaf0b9fa61934069412))
+
 ## 1.0.2
 
 ### Tests
