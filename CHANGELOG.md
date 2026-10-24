@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.4](https://github.com/Olensys/terraform-aws-vpc/compare/v1.0.3...v1.0.4) (2026-10-24)
+
+
+### Bug Fixes
+
+* **examples:** unique application slug so concurrent integration runs do not collide ([#2](https://github.com/Olensys/terraform-aws-vpc/issues/2)) ([704525c](https://github.com/Olensys/terraform-aws-vpc/commit/704525c9279b48af01db08d738f12b1cdc4fa0a4))
+
 ## [1.0.3](https://github.com/Olensys/terraform-aws-vpc/compare/v1.0.2...v1.0.3) (2026-10-24)
 
 
