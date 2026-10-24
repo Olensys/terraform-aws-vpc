@@ -4,7 +4,7 @@
 
 ### Tests
 
-- Removed `test_flow_log_role_scoped`: it only compared `var.flow_log_retention_days` with the value the test had just set, and the flow-log log group and IAM policy are owned by the upstream child module, so no root resource or output exposes them. The scoped role and retention are covered by `trivy config` and the nightly `tests/complete.tftest.hcl` apply.
+- Removed `test_flow_log_role_scoped`: it only compared `var.flow_log_retention_days` with the value the test had just set, and the flow-log log group and IAM policy are owned by the upstream child module, so no root resource or output exposes them. The scoped role and retention are only truly checked by a real apply (the nightly `tests/complete.tftest.hcl` applies the example but asserts nothing about them); `trivy config` enforces them statically where applicable.
 
 ### Docs
 
