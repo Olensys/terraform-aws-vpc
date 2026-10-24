@@ -87,20 +87,6 @@ run "test_none_nat_no_eip" {
   }
 }
 
-run "test_flow_log_role_scoped" {
-  command = plan
-
-  # SMOKE: the flow-log IAM policy is created inside the upstream module (scoped there to the log group ARN with ":*") and is not visible to terraform test; only the retention input and the enable flag are asserted at root. Real check lives in complete.tftest.hcl and trivy.
-  variables {
-    flow_log_retention_days = 90
-  }
-
-  assert {
-    condition     = var.enable_flow_logs == true && var.flow_log_retention_days == 90
-    error_message = "Flow logs must default on and accept a retention override."
-  }
-}
-
 run "test_az_count_validation" {
   command = plan
 

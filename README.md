@@ -15,18 +15,19 @@ VPC with public and private subnets across AZs, NAT gateway strategy, DNS and le
 ## Usage
 
 ```hcl
-module "this" {
-  source = "git::https://github.com/Olensys/terraform-aws-vpc.git?ref=v1.0.0"
+module "naming" {
+  source  = "git::https://github.com/Olensys/terraform-null-naming.git?ref=v1.0.1"
+  context = var.context
+}
 
-  name = "example"
-  context = {
-    organization = "olensys"
-    environment  = "dev"
-    application  = "example"
-    owner        = "platform"
-    cost_center  = "eng"
-  }
+module "vpc" {
+  source  = "git::https://github.com/Olensys/terraform-aws-vpc.git?ref=v1.0.2"
+  name    = module.naming.name
+  context = var.context
+
   cidr = "10.0.0.0/16"
+
+  tags = module.naming.tags
 }
 ```
 
