@@ -131,6 +131,30 @@ run "test_subnet_cidrs_computed" {
   }
 }
 
+run "test_explicit_subnet_cidrs" {
+  command = plan
+
+  variables {
+    public_subnet_cidrs  = ["10.0.0.0/24", "10.0.1.0/24"]
+    private_subnet_cidrs = ["10.0.100.0/24", "10.0.101.0/24"]
+  }
+
+  assert {
+    condition     = output.public_subnet_cidrs == tolist(["10.0.0.0/24", "10.0.1.0/24"]) && output.private_subnet_cidrs == tolist(["10.0.100.0/24", "10.0.101.0/24"])
+    error_message = "Explicit subnet CIDRs must replace the computed ones."
+  }
+}
+
+run "test_subnet_cidr_validation" {
+  command = plan
+
+  variables {
+    public_subnet_cidrs = ["not-a-cidr", "10.0.1.0/24"]
+  }
+
+  expect_failures = [var.public_subnet_cidrs]
+}
+
 run "test_create_false_plans_nothing" {
   command = plan
 

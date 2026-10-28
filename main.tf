@@ -11,8 +11,8 @@ locals {
 
   # First az_count blocks are public, the next az_count are private; every block is the VPC CIDR plus 4 bits.
   subnet_cidrs         = cidrsubnets(var.cidr, [for _ in range(2 * var.az_count) : 4]...)
-  public_subnet_cidrs  = slice(local.subnet_cidrs, 0, var.az_count)
-  private_subnet_cidrs = slice(local.subnet_cidrs, var.az_count, 2 * var.az_count)
+  public_subnet_cidrs  = coalesce(var.public_subnet_cidrs, slice(local.subnet_cidrs, 0, var.az_count))
+  private_subnet_cidrs = coalesce(var.private_subnet_cidrs, slice(local.subnet_cidrs, var.az_count, 2 * var.az_count))
 
   nat_strategy = {
     enabled = var.nat != "none"

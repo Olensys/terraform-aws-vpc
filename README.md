@@ -6,6 +6,7 @@ VPC with public and private subnets across AZs, NAT gateway strategy, DNS and le
 
 - Public and private subnet tiers only, one of each per availability zone (`az_count` 2 or 3). No database tier.
 - Subnets are computed with `cidrsubnets`, each the VPC CIDR plus 4 bits (a /16 yields /20 subnets): the first `az_count` blocks are public, the next `az_count` are private.
+- `public_subnet_cidrs` and `private_subnet_cidrs` replace the computed subnet blocks (one CIDR per availability zone); use them to adopt an existing VPC without replacing its subnets.
 - NAT strategy `nat`: `none`, `single` (default, one shared gateway) or `per_az`. No NAT instances.
 - DNS support and DNS hostnames are always on.
 - Public subnets do not auto-assign public IPs (`map_public_ip_on_launch = false`).
@@ -69,7 +70,9 @@ module "vpc" {
 | <a name="input_enable_flow_logs"></a> [enable\_flow\_logs](#input\_enable\_flow\_logs) | Whether to send VPC flow logs to a CloudWatch log group owned by this module. | `bool` | `true` | no |
 | <a name="input_flow_log_retention_days"></a> [flow\_log\_retention\_days](#input\_flow\_log\_retention\_days) | Retention in days of the flow log CloudWatch log group. | `number` | `30` | no |
 | <a name="input_nat"></a> [nat](#input\_nat) | NAT gateway strategy: none (no NAT), single (one shared NAT gateway), per\_az (one NAT gateway per availability zone). | `string` | `"single"` | no |
+| <a name="input_private_subnet_cidrs"></a> [private\_subnet\_cidrs](#input\_private\_subnet\_cidrs) | Explicit CIDR blocks of the private subnets, one per availability zone, instead of the computed ones. Null computes them from cidr. | `list(string)` | `null` | no |
 | <a name="input_private_subnet_tags"></a> [private\_subnet\_tags](#input\_private\_subnet\_tags) | Extra tags for private subnets, e.g. kubernetes.io/role/internal-elb for internal load balancer discovery. | `map(string)` | `{}` | no |
+| <a name="input_public_subnet_cidrs"></a> [public\_subnet\_cidrs](#input\_public\_subnet\_cidrs) | Explicit CIDR blocks of the public subnets, one per availability zone, instead of the computed ones. Use it to adopt an existing VPC without replacing its subnets. Null computes them from cidr. | `list(string)` | `null` | no |
 | <a name="input_public_subnet_tags"></a> [public\_subnet\_tags](#input\_public\_subnet\_tags) | Extra tags for public subnets, e.g. kubernetes.io/role/elb for load balancer discovery. | `map(string)` | `{}` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags merged onto every taggable resource, applied last. | `map(string)` | `{}` | no |
 
