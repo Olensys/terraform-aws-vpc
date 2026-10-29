@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/Olensys/terraform-aws-vpc/compare/v1.0.4...v1.1.0) (2026-10-29)
+
+
+### Features
+
+* add public_subnet_cidrs and private_subnet_cidrs ([#5](https://github.com/Olensys/terraform-aws-vpc/issues/5)) ([fb855da](https://github.com/Olensys/terraform-aws-vpc/commit/fb855da928ac3eba71d7d61af7f0543586d0bac2))
+
 ## [1.0.4](https://github.com/Olensys/terraform-aws-vpc/compare/v1.0.3...v1.0.4) (2026-10-24)
 
 
