@@ -54,7 +54,7 @@ variable "az_count" {
 }
 
 variable "public_subnet_cidrs" {
-  description = "Explicit CIDR blocks of the public subnets, one per availability zone, instead of the computed ones. Use it to adopt an existing VPC without replacing its subnets. Null computes them from cidr."
+  description = "Explicit CIDR blocks of the public subnets, one per availability zone (the list length must equal az_count), instead of the computed ones. Use it to adopt an existing VPC without replacing its subnets. Null computes them from cidr."
   type        = list(string)
   default     = null
   validation {
@@ -64,7 +64,7 @@ variable "public_subnet_cidrs" {
 }
 
 variable "private_subnet_cidrs" {
-  description = "Explicit CIDR blocks of the private subnets, one per availability zone, instead of the computed ones. Null computes them from cidr."
+  description = "Explicit CIDR blocks of the private subnets, one per availability zone (the list length must equal az_count), instead of the computed ones. Null computes them from cidr."
   type        = list(string)
   default     = null
   validation {

@@ -155,6 +155,18 @@ run "test_subnet_cidr_validation" {
   expect_failures = [var.public_subnet_cidrs]
 }
 
+run "test_subnet_cidr_count_must_match_az_count" {
+  command = plan
+
+  variables {
+    az_count             = 2
+    public_subnet_cidrs  = ["10.0.0.0/24", "10.0.1.0/24", "10.0.2.0/24"]
+    private_subnet_cidrs = ["10.0.100.0/24"]
+  }
+
+  expect_failures = [output.id]
+}
+
 run "test_create_false_plans_nothing" {
   command = plan
 
