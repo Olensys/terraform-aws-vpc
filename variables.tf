@@ -53,6 +53,26 @@ variable "az_count" {
   }
 }
 
+variable "public_subnet_cidrs" {
+  description = "Explicit CIDR blocks of the public subnets, one per availability zone (the list length must equal az_count), instead of the computed ones. Use it to adopt an existing VPC without replacing its subnets. Null computes them from cidr."
+  type        = list(string)
+  default     = null
+  validation {
+    condition     = var.public_subnet_cidrs == null ? true : alltrue([for c in var.public_subnet_cidrs : can(cidrnetmask(c))])
+    error_message = "public_subnet_cidrs must be valid IPv4 CIDR blocks."
+  }
+}
+
+variable "private_subnet_cidrs" {
+  description = "Explicit CIDR blocks of the private subnets, one per availability zone (the list length must equal az_count), instead of the computed ones. Null computes them from cidr."
+  type        = list(string)
+  default     = null
+  validation {
+    condition     = var.private_subnet_cidrs == null ? true : alltrue([for c in var.private_subnet_cidrs : can(cidrnetmask(c))])
+    error_message = "private_subnet_cidrs must be valid IPv4 CIDR blocks."
+  }
+}
+
 variable "nat" {
   description = "NAT gateway strategy: none (no NAT), single (one shared NAT gateway), per_az (one NAT gateway per availability zone)."
   type        = string

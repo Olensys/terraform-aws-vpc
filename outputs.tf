@@ -1,6 +1,16 @@
 output "id" {
   description = "ID of the VPC. Null when create is false."
   value       = var.create ? module.this.vpc_id : null
+
+  precondition {
+    condition     = !var.create || (var.public_subnet_cidrs == null ? true : length(var.public_subnet_cidrs) == var.az_count)
+    error_message = "public_subnet_cidrs must contain exactly az_count CIDR blocks."
+  }
+
+  precondition {
+    condition     = !var.create || (var.private_subnet_cidrs == null ? true : length(var.private_subnet_cidrs) == var.az_count)
+    error_message = "private_subnet_cidrs must contain exactly az_count CIDR blocks."
+  }
 }
 
 output "name" {
