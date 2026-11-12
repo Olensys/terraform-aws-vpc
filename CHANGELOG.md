@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/Olensys/terraform-aws-vpc/compare/v1.1.0...v1.2.0) (2026-11-12)
+
+
+### Features
+
+* add nat = "instance" strategy with a static Elastic IP ([#7](https://github.com/Olensys/terraform-aws-vpc/issues/7)) ([40f3ede](https://github.com/Olensys/terraform-aws-vpc/commit/40f3edec7f1e148890b5115464157b896f5563a0))
+
 ## 1.2.0
 
 ### Behaviour changes
