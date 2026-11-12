@@ -74,12 +74,12 @@ variable "private_subnet_cidrs" {
 }
 
 variable "nat" {
-  description = "NAT gateway strategy: none (no NAT), single (one shared NAT gateway), per_az (one NAT gateway per availability zone)."
+  description = "NAT strategy for private subnet egress: none (no NAT), single (one shared NAT gateway), per_az (one NAT gateway per availability zone), instance (one t4g.nano NAT instance with a static Elastic IP in the first public subnet; cheaper than a gateway, single AZ, no HA)."
   type        = string
   default     = "single"
   validation {
-    condition     = contains(["none", "single", "per_az"], var.nat)
-    error_message = "nat must be one of none, single, per_az."
+    condition     = contains(["none", "single", "per_az", "instance"], var.nat)
+    error_message = "nat must be one of none, single, per_az, instance."
   }
 }
 

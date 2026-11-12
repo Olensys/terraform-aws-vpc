@@ -54,8 +54,18 @@ output "private_route_table_ids" {
 }
 
 output "nat_public_ips" {
-  description = "Public IPs of the NAT gateways (empty when nat is none). Null when create is false."
-  value       = var.create ? module.this.nat_public_ips : null
+  description = "Public IPs of the NAT gateways, or the NAT instance's Elastic IP when nat is instance (empty when nat is none). Null when create is false."
+  value       = var.create ? (local.nat_strategy.instance ? aws_eip.nat_instance[*].public_ip : module.this.nat_public_ips) : null
+}
+
+output "nat_instance_id" {
+  description = "ID of the NAT instance when nat is instance, otherwise null. Null when create is false."
+  value       = local.create_nat_instance ? aws_instance.nat_instance[0].id : null
+}
+
+output "nat_instance_security_group_id" {
+  description = "ID of the NAT instance's security group when nat is instance, otherwise null. Null when create is false."
+  value       = local.create_nat_instance ? aws_security_group.nat_instance[0].id : null
 }
 
 output "azs" {
@@ -64,7 +74,7 @@ output "azs" {
 }
 
 output "nat_strategy" {
-  description = "Resolved NAT strategy flags (enabled, single, per_az) passed to the upstream module. Null when create is false."
+  description = "Resolved NAT strategy flags: enabled (private subnets have internet egress), single, per_az, instance. Null when create is false."
   value       = var.create ? local.nat_strategy : null
 }
 
