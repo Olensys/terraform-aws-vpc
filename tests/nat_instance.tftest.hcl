@@ -87,6 +87,11 @@ run "test_instance_resources" {
   }
 
   assert {
+    condition     = aws_security_group.nat_instance[0].name == "example-nat-instance" && aws_iam_role.nat_instance[0].name == "example-nat-instance" && aws_iam_instance_profile.nat_instance[0].name == "example-nat-instance" && aws_instance.nat_instance[0].tags.Name == "example-nat-instance"
+    error_message = "The instance, security group, role and profile must be named <name>-nat-instance."
+  }
+
+  assert {
     condition     = aws_instance.nat_instance[0].ami == "ami-0123456789abcdef0"
     error_message = "NAT instance AMI must come from the AL2023 arm64 SSM public parameter."
   }

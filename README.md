@@ -39,7 +39,7 @@ module "vpc" {
 What the module creates in this mode, all carrying the module tags:
 
 - `aws_eip` (`domain = "vpc"`) with `prevent_destroy = true`: the IP is typically allow-listed by third parties, so the module never releases it. To retire it, remove it from state (`terraform state rm`) or delete the lifecycle block first.
-- `aws_instance` with `source_dest_check = false`, IMDSv2 required, termination protection and an encrypted root volume, plus `aws_eip_association`. The AMI and the user data are in `ignore_changes`, so neither a new Amazon Linux release nor an imported instance's own bootstrap re-creates a working instance.
+- `aws_instance` with `source_dest_check = false`, IMDSv2 required, termination protection and an encrypted root volume, plus `aws_eip_association`. The AMI, the user data and the root block device are in `ignore_changes`, so neither a new Amazon Linux release nor an imported instance's own bootstrap or unencrypted root volume re-creates a working instance.
 - A security group allowing all traffic from the VPC CIDR and all egress.
 - An IAM role and instance profile with `AmazonSSMManagedInstanceCore` for Session Manager access (no SSH, no key pair).
 - A `0.0.0.0/0` route to the instance's network interface in every private route table. The upstream module still creates a single private route table in this mode.
@@ -59,9 +59,15 @@ terraform import 'module.vpc.aws_eip.nat_instance[0]' eipalloc-0123456789abcdef0
 terraform import 'module.vpc.aws_instance.nat_instance[0]' i-0123456789abcdef0
 terraform import 'module.vpc.aws_eip_association.nat_instance[0]' eipassoc-0123456789abcdef0
 terraform import 'module.vpc.aws_route.nat_instance["0"]' rtb-0123456789abcdef0_0.0.0.0/0
+terraform import 'module.vpc.aws_security_group.nat_instance[0]' sg-0123456789abcdef0
+terraform import 'module.vpc.aws_vpc_security_group_ingress_rule.nat_instance_vpc[0]' sgr-0123456789abcdef0
+terraform import 'module.vpc.aws_vpc_security_group_egress_rule.nat_instance_all[0]' sgr-0123456789abcdef1
+terraform import 'module.vpc.aws_iam_role.nat_instance[0]' my-vpc-nat-instance
+terraform import 'module.vpc.aws_iam_instance_profile.nat_instance[0]' my-vpc-nat-instance
+terraform import 'module.vpc.aws_iam_role_policy_attachment.nat_instance_ssm[0]' my-vpc-nat-instance/arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
 ```
 
-The route key is the position of the route table in `private_route_table_ids` (`"0"` with a single private route table). After importing, `terraform plan` updates the instance's security group, instance profile, metadata options and tags in place; it does not replace the instance. The plan shows a replacement only when the existing instance differs in something immutable: a different subnet, an unencrypted root volume, or no public IP association.
+The route key is the position of the route table in `private_route_table_ids` (`"0"` with a single private route table). Resources the module creates alongside (security group `<name>-nat-instance`, IAM role and instance profile `<name>-nat-instance`) can be imported the same way; names and the security group description are immutable, so an existing one with a different name is replaced instead. After importing, `terraform plan` updates the instance's security group, instance profile, metadata options and tags in place; it does not replace the instance. The plan shows a replacement only when the existing instance differs in something immutable: a different subnet or no public IP association.
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements

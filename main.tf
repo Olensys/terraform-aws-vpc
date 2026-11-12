@@ -31,8 +31,8 @@ locals {
   }
 
   create_nat_instance    = var.create && local.nat_strategy.instance
-  nat_instance_name      = "${var.name}-nat"
-  nat_instance_role_name = "${substr(var.name, 0, 60)}-nat"
+  nat_instance_name      = "${var.name}-nat-instance"
+  nat_instance_role_name = "${substr(var.name, 0, 51)}-nat-instance" # IAM names are capped at 64 characters
 }
 
 module "this" {
@@ -124,7 +124,7 @@ resource "aws_security_group" "nat_instance" {
   count = local.create_nat_instance ? 1 : 0
 
   name        = local.nat_instance_name
-  description = "NAT instance: all traffic from the VPC, all egress"
+  description = "NAT instance: forwards private-subnet egress"
   vpc_id      = module.this.vpc_id
 
   tags = merge(local.tags, { Name = local.nat_instance_name })
@@ -194,10 +194,11 @@ resource "aws_instance" "nat_instance" {
 
   tags = merge(local.tags, { Name = local.nat_instance_name })
 
-  # The AMI parameter moves with every Amazon Linux release and imported instances have their own
-  # user data; neither must replace a working NAT instance.
+  # The AMI parameter moves with every Amazon Linux release, imported instances have their own user
+  # data and root volume (often unencrypted, which would otherwise force a replacement); none of these
+  # must replace a working NAT instance. New instances still get an encrypted root volume.
   lifecycle {
-    ignore_changes = [ami, user_data]
+    ignore_changes = [ami, user_data, root_block_device]
   }
 }
 
