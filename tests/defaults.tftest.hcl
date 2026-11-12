@@ -45,7 +45,7 @@ run "test_single_nat_default" {
   command = plan
 
   assert {
-    condition     = output.nat_strategy == { enabled = true, single = true, per_az = false }
+    condition     = output.nat_strategy == { enabled = true, single = true, per_az = false, instance = false }
     error_message = "Default nat must be a single shared NAT gateway."
   }
 
@@ -64,7 +64,7 @@ run "test_per_az_nat" {
   }
 
   assert {
-    condition     = output.nat_strategy == { enabled = true, single = false, per_az = true }
+    condition     = output.nat_strategy == { enabled = true, single = false, per_az = true, instance = false }
     error_message = "per_az must enable one NAT gateway per AZ and disable the single NAT."
   }
 
@@ -82,7 +82,7 @@ run "test_none_nat_no_eip" {
   }
 
   assert {
-    condition     = output.nat_strategy == { enabled = false, single = false, per_az = false }
+    condition     = output.nat_strategy == { enabled = false, single = false, per_az = false, instance = false }
     error_message = "nat none must disable all NAT gateways (and therefore allocate no EIPs)."
   }
 }
@@ -101,7 +101,7 @@ run "test_nat_validation" {
   command = plan
 
   variables {
-    nat = "instance"
+    nat = "gateway"
   }
 
   expect_failures = [var.nat]
@@ -181,6 +181,7 @@ run "test_create_false_plans_nothing" {
       output.public_subnet_cidrs == null, output.private_subnet_cidrs == null,
       output.private_route_table_ids == null, output.nat_public_ips == null,
       output.azs == null, output.nat_strategy == null, output.tags == null,
+      output.nat_instance_id == null, output.nat_instance_security_group_id == null,
     ])
     error_message = "Every output must be null when create is false."
   }

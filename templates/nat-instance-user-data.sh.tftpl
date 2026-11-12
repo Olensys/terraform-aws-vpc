@@ -1,0 +1,25 @@
+#!/bin/bash
+# NAT instance bootstrap for Amazon Linux 2023 (arm64). Rendered by terraform-aws-vpc.
+set -euxo pipefail
+
+# A 1 GB swap file first: on 512 MB of memory dnf is otherwise OOM-killed.
+if ! swapon --show --noheadings | grep -q '^/swapfile'; then
+  dd if=/dev/zero of=/swapfile bs=1M count=1024
+  chmod 600 /swapfile
+  mkswap /swapfile
+  swapon /swapfile
+  echo '/swapfile none swap sw 0 0' >> /etc/fstab
+fi
+
+dnf install -y iptables-services
+
+echo 'net.ipv4.ip_forward = 1' > /etc/sysctl.d/99-nat.conf
+sysctl -w net.ipv4.ip_forward=1
+
+default_iface=$(ip -o -4 route show to default | awk '{print $5}' | head -n 1)
+
+iptables -F FORWARD
+iptables -t nat -A POSTROUTING -o "$default_iface" -s ${vpc_cidr} -j MASQUERADE
+iptables-save > /etc/sysconfig/iptables
+
+systemctl enable --now iptables

@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.0
+
+### Behaviour changes
+
+- `nat` accepts `instance`: the module creates a `t4g.nano` NAT instance with a static Elastic IP (`prevent_destroy`), its security group, SSM instance role and a `0.0.0.0/0` route in every private route table instead of a NAT gateway. `nat_public_ips` returns that Elastic IP in instance mode.
+- The `nat_strategy` output gains an `instance` key; `enabled` now means "private subnets have internet egress" and is true for every value of `nat` except `none`.
+- New outputs `nat_instance_id` and `nat_instance_security_group_id` (null outside instance mode).
+
 ## [1.1.0](https://github.com/Olensys/terraform-aws-vpc/compare/v1.0.4...v1.1.0) (2026-10-29)
 
 
