@@ -30,6 +30,7 @@ module "this" {
   name    = module.naming.name
   context = local.context
   cidr    = "10.0.0.0/16"
+  nat     = "none" # the integration test account denies managed NAT gateways; keep the example free of standing cost
   tags    = module.naming.tags
 }
 
